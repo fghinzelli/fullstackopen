@@ -1,3 +1,1 @@
-# Getting Started with Create React App
-
 Exercises 1.1 and 1.2 of the Course.

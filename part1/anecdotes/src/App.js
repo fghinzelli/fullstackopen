@@ -4,6 +4,7 @@ import './App.css';
 function App() {
   const [selected, setSelected] = useState(0);
   const [points, setPoints] = useState([])
+  const [mostVotes, setMostVotes] = useState({totalVotes: '', text: ''})
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -22,6 +23,9 @@ function App() {
       newPoints[selected] = 1
     }
     setPoints(newPoints);
+    let maxValue = Math.max(...newPoints)
+    let idMaxValue = newPoints.forEach((i,index) => i === maxValue ? index : null)
+    setMostVotes({totalVotes: maxValue, text: anecdotes[idMaxValue[0]]})
     console.log(newPoints)
   }
 
@@ -33,6 +37,8 @@ function App() {
       <p className="anecdote">{anecdotes[selected]} <br/>has {points[selected] ? points[selected] : 0} votes</p>
       <button onClick={handleAddVote}>vote</button>
       <button onClick={() => setSelected(Math.floor(Math.random() * 6))}>next anecdote</button>
+      <h2>Anecdote with most votes</h2>
+      <p className="anecdote">{mostVotes.text} <br/>has {mostVotes.totalVotes} votes</p>
     </div>
   );
 }

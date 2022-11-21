@@ -29,7 +29,8 @@ function App() {
 
   return (
     <div className="App">
-      <p className="anecdote">{anecdotes[selected]}</p>
+      <h2>Anecdote of the day</h2>
+      <p className="anecdote">{anecdotes[selected]} <br/>has {points[selected] ? points[selected] : 0} votes</p>
       <button onClick={handleAddVote}>vote</button>
       <button onClick={() => setSelected(Math.floor(Math.random() * 6))}>next anecdote</button>
     </div>

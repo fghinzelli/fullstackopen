@@ -1,6 +1,11 @@
 .App {
   text-align: center;
-  padding-top: 50vh;
+  padding-top: 30vh;
+}
+
+.anecdote {
+  font-size: 24px;
+  font-weight: bold;
 }
 
 button {
@@ -12,4 +17,5 @@ button {
   font-size: 16px;
   border: 1px solid rgb(8, 8, 66);
   text-transform: uppercase;
+  margin-left: 12px;
 }

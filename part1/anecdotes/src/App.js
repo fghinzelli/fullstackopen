@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 
 function App() {
-  const [selected, setSelected] = useState(1)
+  const [selected, setSelected] = useState(0);
+  const [points, setPoints] = useState([])
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -11,12 +12,25 @@ function App() {
     'Premature optimization is the root of all evil.',
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.'
-  ]
+  ];
+
+  const handleAddVote = () => {
+    const newPoints = [...points];
+    if (newPoints[selected]) {
+      newPoints[selected] += 1 
+    } else {
+      newPoints[selected] = 1
+    }
+    setPoints(newPoints);
+    console.log(newPoints)
+  }
+
 
 
   return (
     <div className="App">
-      <p>{anecdotes[selected]}</p>
+      <p className="anecdote">{anecdotes[selected]}</p>
+      <button onClick={handleAddVote}>vote</button>
       <button onClick={() => setSelected(Math.floor(Math.random() * 6))}>next anecdote</button>
     </div>
   );

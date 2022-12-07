@@ -1,1 +1,1 @@
-Exercises 2.6 to 2.10 of the Course.
+Exercises 2.6 to 2.11 of the Course.

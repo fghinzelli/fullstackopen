@@ -1,4 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import './App.css';
+import axios from 'axios';
+import Country from './components/Country';
+import Countries from './components/Countries';
 
 const App = () => {
   const [countries, setCountries] = useState([])
@@ -6,17 +10,45 @@ const App = () => {
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [filter, setFilter] = useState('')
 
-  return (
-    <div>
-      <p>find coutries</p>
-      <input value={filter} onChange={(e) => setFilter(e.target.value)} type="text" />
-      <ul>
-      {countries.length > 10 ? 
-        countries.map(country => <li key={country.ccn3}>{country.name.common}</li>)
-        : <p>Too mamy matches, specify another filter</p>}
-      </ul>
-    </div>
-  )
+  useEffect(() => {
+    axios
+      .get('https://restcountries.com/v3.1/all')
+      .then(response => {
+        setCountries(response.data)
+      })
+  }, [])
+
+  const findCountries = (event) => {
+    let filterValue = event.target.value;
+    setFilter(filterValue)
+    const fCountries = countries.filter(countryItem => countryItem.name.common.indexOf(filterValue) !== -1)
+    setFilteredCountries(fCountries)
+    if (fCountries.length === 1) {
+      setCountry(fCountries[0]);
+    } else {
+      setCountry(null);
+    }
+  }
+
+  let countryBlock = null;
+  if (country) {
+    countryBlock = <Country country={country} />
+  } else if (filter !== '') {
+    if (filteredCountries.length > 10) {
+      countryBlock = <p>Too mamy matches, specify another filter</p>
+    } else {
+      countryBlock = <Countries countries={filteredCountries} />
+    }
+  }
+
+return (
+  <div>
+    <p>find coutries</p>
+    <input value={filter} onChange={findCountries} type="text" />
+
+    {countryBlock}
+  </div>
+)
 }
 
 export default App

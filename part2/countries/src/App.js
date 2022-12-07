@@ -3,6 +3,7 @@ import './App.css';
 import axios from 'axios';
 import Country from './components/Country';
 import Countries from './components/Countries';
+import Filter from './components/Filter';
 
 const App = () => {
   const [countries, setCountries] = useState([])
@@ -44,8 +45,7 @@ const App = () => {
 return (
   <div>
     <p>find coutries</p>
-    <input value={filter} onChange={findCountries} type="text" />
-
+    <Filter filter={filter} findCountries={findCountries} />
     {countryBlock}
   </div>
 )

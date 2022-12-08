@@ -9,7 +9,8 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [country, setCountry] = useState(null);
   const [filteredCountries, setFilteredCountries] = useState([]);
-  const [filter, setFilter] = useState('')
+  const [filter, setFilter] = useState('');
+  const [weather, setWeather] = useState({});
 
   useEffect(() => {
     axios
@@ -25,7 +26,11 @@ const App = () => {
     const fCountries = countries.filter(countryItem => countryItem.name.common.indexOf(filterValue) !== -1)
     setFilteredCountries(fCountries)
     if (fCountries.length === 1) {
-      setCountry(fCountries[0]);
+      let selectedCountry = fCountries[0]
+      setCountry(selectedCountry);
+      axios
+        .get(`https://api.openweathermap.org/data/2.5/weather?lat=${selectedCountry.latlng[0]}&lon=${selectedCountry.latlng[1]}&units=metric&appid=dbe34f8c062e570837ffde2faf26bab1`)
+        .then(response => setWeather(response.data))
     } else {
       setCountry(null);
     }
@@ -33,7 +38,7 @@ const App = () => {
 
   let countryBlock = null;
   if (country) {
-    countryBlock = <Country country={country} />
+    countryBlock = <Country country={country} weather={weather} />
   } else if (filter !== '') {
     if (filteredCountries.length > 10) {
       countryBlock = <p>Too mamy matches, specify another filter</p>

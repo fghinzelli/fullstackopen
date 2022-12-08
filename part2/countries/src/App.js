@@ -38,7 +38,7 @@ const App = () => {
     if (filteredCountries.length > 10) {
       countryBlock = <p>Too mamy matches, specify another filter</p>
     } else {
-      countryBlock = <Countries countries={filteredCountries} />
+      countryBlock = <Countries showCountry={country => setCountry(country)} countries={filteredCountries} />
     }
   }
 

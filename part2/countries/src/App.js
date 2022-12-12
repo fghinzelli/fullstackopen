@@ -5,6 +5,8 @@ import Country from './components/Country';
 import Countries from './components/Countries';
 import Filter from './components/Filter';
 
+const API_KEY = process.env.REACT_APP_API_KEY;
+
 const App = () => {
   const [countries, setCountries] = useState([])
   const [country, setCountry] = useState(null);
@@ -29,10 +31,11 @@ const App = () => {
       let selectedCountry = fCountries[0]
       setCountry(selectedCountry);
       axios
-        .get(`https://api.openweathermap.org/data/2.5/weather?lat=${selectedCountry.latlng[0]}&lon=${selectedCountry.latlng[1]}&units=metric&appid=dbe34f8c062e570837ffde2faf26bab1`)
+        .get(`https://api.openweathermap.org/data/2.5/weather?lat=${selectedCountry.capitalInfo.latlng[0]}&lon=${selectedCountry.capitalInfo.latlng[1]}&units=metric&appid=${API_KEY}`)
         .then(response => setWeather(response.data))
     } else {
       setCountry(null);
+      setWeather(null);
     }
   }
 

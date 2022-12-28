@@ -22,16 +22,26 @@ const App = () => {
   const handleNewName = event => {
     event.preventDefault();
     let formattedName = newName.trim();
-    
-    if (formattedName !== '') {
-      if ((persons.filter(person => person.name === formattedName)).length > 0) {
-        if (window.confirm(`${formattedName} is already added to phonebook`)
-      } else {
-        let newPerson = { 
-          name: newName, 
-          number: newNumber 
-        }
 
+    let newPerson = { 
+      name: newName, 
+      number: newNumber 
+    }
+    
+    if (newPerson.name !== '') {
+      let filtredList = persons.filter(person => person.name === newPerson.name)
+      if (filtredList.length > 0) {
+        if (window.confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one?`)) {
+          personsApi.update(filtredList[0].id, newPerson)
+          .then(updatedPerson => {
+            const newList = persons.filter(person => person.name !== newPerson.name).concat(updatedPerson)
+            setPersons(newList)
+            setFilteredPersons(newList.filter(person => (person.name.toUpperCase()).indexOf(filter.toUpperCase()) !== -1));
+            setNewName('');
+            setNewNumber('');
+          })
+        }
+      } else {
         personsApi.create(newPerson)
         .then(response => {
           const newPersons = persons.concat(response.data)
@@ -42,6 +52,13 @@ const App = () => {
         })
       }
     }
+  }
+
+  const updateLists = (newList) => {
+    setPersons(newList)
+    setFilteredPersons(newList.filter(person => (person.name.toUpperCase()).indexOf(filter.toUpperCase()) !== -1));
+    setNewName('');
+    setNewNumber('');
   }
 
   const handleRemovePerson = (person) => {

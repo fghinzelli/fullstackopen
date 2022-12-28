@@ -25,7 +25,7 @@ const App = () => {
     
     if (formattedName !== '') {
       if ((persons.filter(person => person.name === formattedName)).length > 0) {
-        alert(`${formattedName} is already added to phonebook`)
+        if (window.confirm(`${formattedName} is already added to phonebook`)
       } else {
         let newPerson = { 
           name: newName, 

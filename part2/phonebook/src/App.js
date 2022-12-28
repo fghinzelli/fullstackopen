@@ -11,10 +11,13 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
+  const API_URL = 'http://localhost:3001/persons';
+
   useEffect(()=> {
     axios
-      .get('http://localhost:3001/persons')
+      .get(API_URL)
       .then(response => {
+        setPersons(response.data)
         setFilteredPersons(response.data)
       })
   }, [])
@@ -27,11 +30,19 @@ const App = () => {
       if ((persons.filter(person => person.name === formattedName)).length > 0) {
         alert(`${formattedName} is already added to phonebook`)
       } else {
-        const newPersons = persons.concat({ name: newName, number: newNumber })
-        setPersons(newPersons)
-        setFilteredPersons(newPersons.filter(person => (person.name.toUpperCase()).indexOf(filter.toUpperCase()) !== -1));
-        setNewName('');
-        setNewNumber('');
+        let newPerson = { 
+          name: newName, 
+          number: newNumber 
+        }
+
+        axios.post(API_URL, newPerson)
+        .then(response => {
+          const newPersons = persons.concat(response.data)
+          setPersons(newPersons)
+          setFilteredPersons(newPersons.filter(person => (person.name.toUpperCase()).indexOf(filter.toUpperCase()) !== -1));
+          setNewName('');
+          setNewNumber('');
+        })
       }
     }
   }

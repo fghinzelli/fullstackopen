@@ -44,6 +44,16 @@ const App = () => {
     }
   }
 
+  const handleRemovePerson = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personsApi.remove(person.id)
+      .then(response => {
+        setPersons(persons.filter(p => p.id !== person.id))
+        setFilteredPersons(persons.filter(p => p.id !== person.id))
+      })
+    }
+  }
+
   const handleFilterByName = event => {
     const txtFilter = event.target.value;
     setFilter(txtFilter);
@@ -66,7 +76,7 @@ const App = () => {
         submitForm={handleNewName}
       />
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} removeItem={person => handleRemovePerson(person)} />
     </div>
   )
 }

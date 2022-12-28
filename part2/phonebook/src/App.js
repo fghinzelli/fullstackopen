@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
-import axios from 'axios';
+import personsApi from './services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,11 +11,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
-  const API_URL = 'http://localhost:3001/persons';
-
   useEffect(()=> {
-    axios
-      .get(API_URL)
+    personsApi.getAll()
       .then(response => {
         setPersons(response.data)
         setFilteredPersons(response.data)
@@ -35,7 +32,7 @@ const App = () => {
           number: newNumber 
         }
 
-        axios.post(API_URL, newPerson)
+        personsApi.create(newPerson)
         .then(response => {
           const newPersons = persons.concat(response.data)
           setPersons(newPersons)

@@ -24,7 +24,7 @@ const App = () => {
     let formattedName = newName.trim();
 
     let newPerson = { 
-      name: newName, 
+      name: formattedName, 
       number: newNumber 
     }
     
@@ -34,21 +34,15 @@ const App = () => {
         if (window.confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one?`)) {
           personsApi.update(filtredList[0].id, newPerson)
           .then(updatedPerson => {
-            const newList = persons.filter(person => person.name !== newPerson.name).concat(updatedPerson)
-            setPersons(newList)
-            setFilteredPersons(newList.filter(person => (person.name.toUpperCase()).indexOf(filter.toUpperCase()) !== -1));
-            setNewName('');
-            setNewNumber('');
+            const newList = persons.filter(person => person.name !== newPerson.name).concat(updatedPerson.data)
+            updateLists(newList)
           })
         }
       } else {
         personsApi.create(newPerson)
         .then(response => {
           const newPersons = persons.concat(response.data)
-          setPersons(newPersons)
-          setFilteredPersons(newPersons.filter(person => (person.name.toUpperCase()).indexOf(filter.toUpperCase()) !== -1));
-          setNewName('');
-          setNewNumber('');
+          updateLists(newPersons)
         })
       }
     }

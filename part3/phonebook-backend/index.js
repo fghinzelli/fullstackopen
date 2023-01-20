@@ -1,8 +1,14 @@
 const express = require('express');
+const morgan = require('morgan');
+
+morgan.token('body', req => {
+  return JSON.stringify(req.body)
+})
 
 const app = express();
 
 app.use(express.json());
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 let persons = [
   {
@@ -37,9 +43,7 @@ app.post('/api/persons', (request, response) => {
 
   const body = request.body;
   
-
   if (!body.name || !body.number) {
-  
     return response.status(400).json({ error: 'Content missing' })
   } else {
     const person = persons.find(person => person.name === body.name)
@@ -78,7 +82,6 @@ app.get('/info', (request, response) => {
   response.write(now.toString());
   response.end();
 })
-
 
 app.listen(SERVER_PORT, () => {
   console.log(`Server listen on port ${SERVER_PORT}`)

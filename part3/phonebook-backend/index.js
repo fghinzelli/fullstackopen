@@ -2,6 +2,8 @@ const express = require('express');
 
 const app = express();
 
+app.use(express.json());
+
 let persons = [
   {
     "id": 1,
@@ -30,6 +32,28 @@ const SERVER_PORT = 3001;
 app.get('/api/persons', (request, response) => {
   response.json(persons);
 })
+
+app.post('/api/persons', (request, response) => {
+
+  const body = request.body;
+  
+
+  if (!body.name || !body.number) {
+  
+    return response.status(400).json({ error: 'Content missing' })
+  } else {
+    const person = persons.find(person => person.name === body.name)
+    if (person) {
+      return response.status(400).json({error: 'The Name already exists'})
+    }
+    const newPerson = {
+      id: Math.round((Math.random() * 100) + 4),
+      ...body
+    }
+    persons = persons.concat(newPerson);
+    response.status(201).json(newPerson);
+  }
+});
 
 app.get('/api/persons/:id', (request, response) => {
   const id = parseInt(request.params.id);

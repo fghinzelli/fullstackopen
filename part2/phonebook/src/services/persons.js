@@ -1,21 +1,21 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001';
+const baseUrl = '/api/persons';
 
 const getAll = () => {
-  return axios.get(`${API_URL}/persons`)
+  return axios.get(baseUrl)
 }
 
 const create = newPerson => {
-  return axios.post(`${API_URL}/persons`, newPerson)
+  return axios.post(baseUrl, newPerson)
 }
 
 const update = (id, person) => {
-  return axios.put(`${API_URL}/persons/${id}`, person)
+  return axios.put(`${baseUrl}/${id}`, person)
 }
 
 const remove = id => {
-  return axios.delete(`${API_URL}/persons/${id}`)
+  return axios.delete(`${baseUrl}/${id}`)
 }
 
 // eslint-disable-next-line

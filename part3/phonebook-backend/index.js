@@ -23,18 +23,32 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
 
   const body = request.body;
-  
+
   if (!body.name || !body.number) {
     return response.status(400).json({ error: 'Content missing' })
-  } 
-    
-  const newPerson = new Person({...body})
+  }
+  
+  Person.findOne({name: body.name}).then(person => {
+    if (person) {
+      const loadData = {
+        name: body.name,
+        number: body.number
+      }
+      Person.findByIdAndUpdate(person.id, loadData, { new: true })
+      .then(updateNote => {
+        response.json(updateNote)
+      })
+      .catch(error => next(error))
+    } else {
+      const newPerson = new Person({...body})
 
-  newPerson.save().then(savedPerson => {
-    response.json(savedPerson)
+      newPerson.save().then(savedPerson => {
+        response.json(savedPerson)
+      })
+    }
   })
 });
 
